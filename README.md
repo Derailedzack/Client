@@ -6,8 +6,8 @@ The OSM client aims to provide essential fixes to the game, such as a skin & clo
 
 **Gameplay Features**
 
--Skin & cloak patch.
--Custom session authentication.
+Skin & cloak patch.  
+Custom session authentication.
 
 **Modder Features**
 
