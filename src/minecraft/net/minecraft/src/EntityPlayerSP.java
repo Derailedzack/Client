@@ -8,6 +8,7 @@ package net.minecraft.src;
 import me.moderator_man.osm.OSM;
 import me.moderator_man.osm.event.Type;
 import me.moderator_man.osm.event.events.EventUpdate;
+import me.moderator_man.osm.threads.ThreadConfigurePlayer;
 import net.minecraft.client.Minecraft;
 
 // Referenced classes of package net.minecraft.src:
@@ -32,10 +33,15 @@ public class EntityPlayerSP extends EntityPlayer
         dimension = i;
         if(session != null && session.username != null && session.username.length() > 0)
         {
-        	skinUrl = OSM.INSTANCE.get("https://www.oldschoolminecraft.com/getskin?username=" + session.username);
+        	skinUrl = "";
+        	cloakUrl = "";
+        	ThreadConfigurePlayer tcp = new ThreadConfigurePlayer(this);
+        	tcp.start();
+        	
+        	//skinUrl = OSM.INSTANCE.get("https://www.oldschoolminecraft.com/getskin?username=" + session.username);
         	//cloakUrl = OSM.INSTANCE.get("https://www.oldschoolminecraft.com/getcloak?username=" + session.username);
         	//skinUrl = "https://www.oldschoolminecraft.com/getimg?key=" + session.username;
-        	cloakUrl = OSM.INSTANCE.get(String.format("https://www.oldschoolminecraft.com/getcloak?username=%s", session.username));
+        	//cloakUrl = OSM.INSTANCE.get(String.format("https://www.oldschoolminecraft.com/getcloak?username=%s", session.username));
         }
         username = session.username;
     }

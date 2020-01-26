@@ -5,7 +5,7 @@
 
 package net.minecraft.src;
 
-import me.moderator_man.osm.OSM;
+import me.moderator_man.osm.threads.ThreadConfigurePlayer;
 
 // Referenced classes of package net.minecraft.src:
 //            EntityPlayer, MathHelper, ItemStack, InventoryPlayer, 
@@ -23,8 +23,13 @@ public class EntityOtherPlayerMP extends EntityPlayer
         stepHeight = 0.0F;
         if(s != null && s.length() > 0)
         {
-        	skinUrl = OSM.INSTANCE.get("https://www.oldschoolminecraft.com/getskin?username=" + s);
-        	cloakUrl = OSM.INSTANCE.get(String.format("https://www.oldschoolminecraft.com/getcloak?username=%s", s));
+        	skinUrl = "";
+        	cloakUrl = "";
+        	
+        	ThreadConfigurePlayer tcp = new ThreadConfigurePlayer(this);
+        	tcp.start();
+        	//skinUrl = OSM.INSTANCE.get("https://www.oldschoolminecraft.com/getskin?username=" + s);
+        	//cloakUrl = OSM.INSTANCE.get(String.format("https://www.oldschoolminecraft.com/getcloak?username=%s", s));
         	
         	//skinUrl = OSM.INSTANCE.get((new StringBuilder()).append("https://www.oldschoolminecraft.com/getskin?username=").append(s).toString());
         	//cloakUrl = OSM.INSTANCE.get((new StringBuilder()).append("https://www.oldschoolminecraft.com/getcloak?username=").append(s).toString());
