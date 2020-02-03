@@ -11,6 +11,8 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
+import me.moderator_man.osm.OSM;
+
 // Referenced classes of package net.minecraft.src:
 //            Gui, ScaledResolution, EntityRenderer, EntityPlayerSP, 
 //            InventoryPlayer, GameSettings, ItemStack, Block, 
@@ -176,6 +178,7 @@ public class GuiIngame extends Gui
             GL11.glEnable(3008 /*GL_ALPHA_TEST*/);
             GL11.glEnable(2929 /*GL_DEPTH_TEST*/);
         }
+        String text4 = "oldschoolminecraft.com";
         if(mc.gameSettings.showDebugInfo)
         {
             GL11.glPushMatrix();
@@ -183,7 +186,7 @@ public class GuiIngame extends Gui
             {
                 GL11.glTranslatef(0.0F, 32F, 0.0F);
             }
-            fontrenderer.drawStringWithShadow((new StringBuilder()).append("Minecraft Beta 1.7.3 (").append(mc.debug).append(")").toString(), 2, 2, 0xffffff);
+            fontrenderer.drawStringWithShadow((new StringBuilder()).append(text4+" (").append(mc.debug).append(")").toString(), 2, 2, 0xffffff);
             fontrenderer.drawStringWithShadow(mc.debugInfoRenders(), 2, 12, 0xffffff);
             fontrenderer.drawStringWithShadow(mc.func_6262_n(), 2, 22, 0xffffff);
             fontrenderer.drawStringWithShadow(mc.debugInfoEntities(), 2, 32, 0xffffff);
@@ -201,6 +204,11 @@ public class GuiIngame extends Gui
             drawString(fontrenderer, (new StringBuilder()).append("z: ").append(mc.thePlayer.posZ).toString(), 2, 80, 0xe0e0e0);
             drawString(fontrenderer, (new StringBuilder()).append("f: ").append(MathHelper.floor_double((double)((mc.thePlayer.rotationYaw * 4F) / 360F) + 0.5D) & 3).toString(), 2, 88, 0xe0e0e0);
             GL11.glPopMatrix();
+        }
+        else {
+        	if (!OSM.INSTANCE.donators.contains(Minecraft.getMinecraft().session.username)) {
+        		fontrenderer.drawStringWithShadow((new StringBuilder()).append(text4).toString(), 2, 2, 0xA9A9A9); //leo did this
+        	}
         }
         if(recordPlayingUpFor > 0)
         {

@@ -5,12 +5,19 @@
 
 package net.minecraft.src;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.*;
-import net.minecraft.client.Minecraft;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
+
+import me.moderator_man.osm.OSM;
+import net.minecraft.client.Minecraft;
 
 // Referenced classes of package net.minecraft.src:
 //            GuiScreen, StringTranslate, GuiButton, GuiOptions, 
@@ -76,6 +83,7 @@ public class GuiMainMenu extends GuiScreen
         {
             splashText = "Happy new year!";
         }
+        splashText = "oldschoolminecraft.com";
         StringTranslate stringtranslate = StringTranslate.getInstance();
         int i = height / 4 + 48;
         controlList.add(new GuiButton(1, width / 2 - 100, i, stringtranslate.translateKey("menu.singleplayer")));
@@ -142,6 +150,10 @@ public class GuiMainMenu extends GuiScreen
         drawString(fontRenderer, "Minecraft Beta 1.7.3", 2, 2, 0x505050);
         String s = "Copyright Mojang AB. Do not distribute.";
         drawString(fontRenderer, s, width - fontRenderer.getStringWidth(s) - 2, height - 10, 0xffffff);
+        if (OSM.INSTANCE.donators.contains(Minecraft.getMinecraft().session.username)) {
+        	String s1 = "Thanks for donating, "+ mc.session.username+"!";
+            drawString(fontRenderer, s1,2, height - 10, Color.HSBtoRGB(System.currentTimeMillis() % 1000L / 1000f, 0.8f, 0.8f)); //leo donation thing
+        }
         super.drawScreen(i, j, f);
     }
 
