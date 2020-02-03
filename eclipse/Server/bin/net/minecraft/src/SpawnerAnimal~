@@ -1,0 +1,328 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) braces deadcode 
+// Source File Name:   SourceFile
+
+package net.minecraft.src;
+
+import java.lang.reflect.Constructor;
+import java.util.*;
+
+// Referenced classes of package net.minecraft.src:
+//            World, ChunkPosition, EntityPlayer, MathHelper, 
+//            ChunkCoordIntPair, EnumCreatureType, WorldChunkManager, BiomeGenBase, 
+//            SpawnListEntry, ChunkCoordinates, EntityLiving, Material, 
+//            EntitySpider, EntitySkeleton, EntitySheep, Pathfinder, 
+//            PathEntity, PathPoint, BlockBed, EntityZombie
+
+public final class SpawnerAnimals
+{
+
+    public SpawnerAnimals()
+    {
+    }
+
+    protected static ChunkPosition func_4112_a(World world, int i, int j)
+    {
+        int k = i + world.field_803_m.nextInt(16);
+        int l = world.field_803_m.nextInt(128);
+        int i1 = j + world.field_803_m.nextInt(16);
+        return new ChunkPosition(k, l, i1);
+    }
+
+    public static final int func_4111_a(World world, boolean flag, boolean flag1)
+    {
+        int j;
+        ChunkCoordinates chunkcoordinates;
+        EnumCreatureType aenumcreaturetype[];
+        int i1;
+        int j1;
+        if(!flag && !flag1)
+        {
+            return 0;
+        }
+        field_4311_a.clear();
+        for(int i = 0; i < world.field_805_k.size(); i++)
+        {
+            EntityPlayer entityplayer = (EntityPlayer)world.field_805_k.get(i);
+            int k = MathHelper.func_584_b(entityplayer.field_322_l / 16D);
+            int l = MathHelper.func_584_b(entityplayer.field_320_n / 16D);
+            byte byte0 = 8;
+            for(int k1 = -byte0; k1 <= byte0; k1++)
+            {
+                for(int l1 = -byte0; l1 <= byte0; l1++)
+                {
+                    field_4311_a.add(new ChunkCoordIntPair(k1 + k, l1 + l));
+                }
+
+            }
+
+        }
+
+        j = 0;
+        chunkcoordinates = world.func_22078_l();
+        aenumcreaturetype = EnumCreatureType.values();
+        i1 = aenumcreaturetype.length;
+        j1 = 0;
+_L10:
+        if(j1 >= i1) goto _L2; else goto _L1
+_L1:
+        EnumCreatureType enumcreaturetype;
+        Iterator iterator;
+        enumcreaturetype = aenumcreaturetype[j1];
+        if(enumcreaturetype.func_21103_d() && !flag1 || !enumcreaturetype.func_21103_d() && !flag || world.func_487_a(enumcreaturetype.func_21105_a()) > (enumcreaturetype.func_21104_b() * field_4311_a.size()) / 256)
+        {
+            continue; /* Loop/switch isn't completed */
+        }
+        iterator = field_4311_a.iterator();
+_L4:
+        SpawnListEntry spawnlistentry1;
+        int k2;
+        int l2;
+        int i3;
+        int j3;
+        int k3;
+        do
+        {
+            ChunkCoordIntPair chunkcoordintpair;
+            List list;
+            do
+            {
+                if(!iterator.hasNext())
+                {
+                    continue; /* Loop/switch isn't completed */
+                }
+                chunkcoordintpair = (ChunkCoordIntPair)iterator.next();
+                BiomeGenBase biomegenbase = world.func_4077_a().func_4066_a(chunkcoordintpair);
+                list = biomegenbase.func_25055_a(enumcreaturetype);
+            } while(list == null || list.isEmpty());
+            int i2 = 0;
+            for(Iterator iterator1 = list.iterator(); iterator1.hasNext();)
+            {
+                SpawnListEntry spawnlistentry = (SpawnListEntry)iterator1.next();
+                i2 += spawnlistentry.field_25144_b;
+            }
+
+            int j2 = world.field_803_m.nextInt(i2);
+            spawnlistentry1 = (SpawnListEntry)list.get(0);
+            Object obj = list.iterator();
+            do
+            {
+                if(!((Iterator) (obj)).hasNext())
+                {
+                    break;
+                }
+                SpawnListEntry spawnlistentry2 = (SpawnListEntry)((Iterator) (obj)).next();
+                j2 -= spawnlistentry2.field_25144_b;
+                if(j2 >= 0)
+                {
+                    continue;
+                }
+                spawnlistentry1 = spawnlistentry2;
+                break;
+            } while(true);
+            obj = func_4112_a(world, chunkcoordintpair.field_152_a * 16, chunkcoordintpair.field_151_b * 16);
+            k2 = ((ChunkPosition) (obj)).field_846_a;
+            l2 = ((ChunkPosition) (obj)).field_845_b;
+            i3 = ((ChunkPosition) (obj)).field_847_c;
+        } while(world.func_445_d(k2, l2, i3) || world.func_443_c(k2, l2, i3) != enumcreaturetype.func_21102_c());
+        j3 = 0;
+        k3 = 0;
+_L9:
+        if(k3 >= 3) goto _L4; else goto _L3
+_L3:
+        int l3;
+        int i4;
+        int j4;
+        byte byte1;
+        int k4;
+        l3 = k2;
+        i4 = l2;
+        j4 = i3;
+        byte1 = 6;
+        k4 = 0;
+_L8:
+        if(k4 >= 4) goto _L6; else goto _L5
+_L5:
+        EntityLiving entityliving;
+        l3 += world.field_803_m.nextInt(byte1) - world.field_803_m.nextInt(byte1);
+        i4 += world.field_803_m.nextInt(1) - world.field_803_m.nextInt(1);
+        j4 += world.field_803_m.nextInt(byte1) - world.field_803_m.nextInt(byte1);
+        if(!func_21167_a(enumcreaturetype, world, l3, i4, j4))
+        {
+            continue; /* Loop/switch isn't completed */
+        }
+        float f = (float)l3 + 0.5F;
+        float f1 = i4;
+        float f2 = (float)j4 + 0.5F;
+        if(world.func_456_a(f, f1, f2, 24D) != null)
+        {
+            continue; /* Loop/switch isn't completed */
+        }
+        float f3 = f - (float)chunkcoordinates.field_22216_a;
+        float f4 = f1 - (float)chunkcoordinates.field_529_a;
+        float f5 = f2 - (float)chunkcoordinates.field_528_b;
+        float f6 = f3 * f3 + f4 * f4 + f5 * f5;
+        if(f6 < 576F)
+        {
+            continue; /* Loop/switch isn't completed */
+        }
+        try
+        {
+            entityliving = (EntityLiving)spawnlistentry1.field_25145_a.getConstructor(new Class[] {
+                net.minecraft.src.World.class
+            }).newInstance(new Object[] {
+                world
+            });
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+            return j;
+        }
+        entityliving.func_107_c(f, f1, f2, world.field_803_m.nextFloat() * 360F, 0.0F);
+        if(!entityliving.func_155_a())
+        {
+            break; /* Loop/switch isn't completed */
+        }
+        j3++;
+        world.func_526_a(entityliving);
+        func_21166_a(entityliving, world, f, f1, f2);
+        if(j3 < entityliving.func_4045_i()) goto _L7; else goto _L4
+_L7:
+        j += j3;
+        k4++;
+          goto _L8
+_L6:
+        k3++;
+          goto _L9
+        j1++;
+          goto _L10
+_L2:
+        return j;
+    }
+
+    private static boolean func_21167_a(EnumCreatureType enumcreaturetype, World world, int i, int j, int k)
+    {
+        if(enumcreaturetype.func_21102_c() == Material.field_521_f)
+        {
+            return world.func_443_c(i, j, k).func_217_d() && !world.func_445_d(i, j + 1, k);
+        } else
+        {
+            return world.func_445_d(i, j - 1, k) && !world.func_445_d(i, j, k) && !world.func_443_c(i, j, k).func_217_d() && !world.func_445_d(i, j + 1, k);
+        }
+    }
+
+    private static void func_21166_a(EntityLiving entityliving, World world, float f, float f1, float f2)
+    {
+        if((entityliving instanceof EntitySpider) && world.field_803_m.nextInt(100) == 0)
+        {
+            EntitySkeleton entityskeleton = new EntitySkeleton(world);
+            entityskeleton.func_107_c(f, f1, f2, entityliving.field_316_r, 0.0F);
+            world.func_526_a(entityskeleton);
+            entityskeleton.func_6094_e(entityliving);
+        } else
+        if(entityliving instanceof EntitySheep)
+        {
+            ((EntitySheep)entityliving).func_21070_a(EntitySheep.func_21066_a(world.field_803_m));
+        }
+    }
+
+    public static boolean func_22212_a(World world, List list)
+    {
+        boolean flag = false;
+        Pathfinder pathfinder = new Pathfinder(world);
+        Iterator iterator = list.iterator();
+        do
+        {
+            if(!iterator.hasNext())
+            {
+                break;
+            }
+            EntityPlayer entityplayer = (EntityPlayer)iterator.next();
+            Class aclass[] = field_22213_a;
+            if(aclass != null && aclass.length != 0)
+            {
+                boolean flag1 = false;
+                int i = 0;
+                while(i < 20 && !flag1) 
+                {
+                    int j = (MathHelper.func_584_b(entityplayer.field_322_l) + world.field_803_m.nextInt(32)) - world.field_803_m.nextInt(32);
+                    int k = (MathHelper.func_584_b(entityplayer.field_320_n) + world.field_803_m.nextInt(32)) - world.field_803_m.nextInt(32);
+                    int l = (MathHelper.func_584_b(entityplayer.field_321_m) + world.field_803_m.nextInt(16)) - world.field_803_m.nextInt(16);
+                    if(l < 1)
+                    {
+                        l = 1;
+                    } else
+                    if(l > 128)
+                    {
+                        l = 128;
+                    }
+                    int i1 = world.field_803_m.nextInt(aclass.length);
+                    int j1;
+                    for(j1 = l; j1 > 2 && !world.func_445_d(j, j1 - 1, k); j1--) { }
+                    for(; !func_21167_a(EnumCreatureType.monster, world, j, j1, k) && j1 < l + 16 && j1 < 128; j1++) { }
+                    if(j1 >= l + 16 || j1 >= 128)
+                    {
+                        j1 = l;
+                    } else
+                    {
+                        float f = (float)j + 0.5F;
+                        float f1 = j1;
+                        float f2 = (float)k + 0.5F;
+                        EntityLiving entityliving;
+                        try
+                        {
+                            entityliving = (EntityLiving)aclass[i1].getConstructor(new Class[] {
+                                net.minecraft.src.World.class
+                            }).newInstance(new Object[] {
+                                world
+                            });
+                        }
+                        catch(Exception exception)
+                        {
+                            exception.printStackTrace();
+                            return flag;
+                        }
+                        entityliving.func_107_c(f, f1, f2, world.field_803_m.nextFloat() * 360F, 0.0F);
+                        if(entityliving.func_155_a())
+                        {
+                            PathEntity pathentity = pathfinder.func_657_a(entityliving, entityplayer, 32F);
+                            if(pathentity != null && pathentity.field_1005_a > 1)
+                            {
+                                PathPoint pathpoint = pathentity.func_22211_c();
+                                if(Math.abs((double)pathpoint.field_1016_a - entityplayer.field_322_l) < 1.5D && Math.abs((double)pathpoint.field_1014_c - entityplayer.field_320_n) < 1.5D && Math.abs((double)pathpoint.field_1015_b - entityplayer.field_321_m) < 1.5D)
+                                {
+                                    ChunkCoordinates chunkcoordinates = BlockBed.func_22021_g(world, MathHelper.func_584_b(entityplayer.field_322_l), MathHelper.func_584_b(entityplayer.field_321_m), MathHelper.func_584_b(entityplayer.field_320_n), 1);
+                                    if(chunkcoordinates == null)
+                                    {
+                                        chunkcoordinates = new ChunkCoordinates(j, j1 + 1, k);
+                                    }
+                                    entityliving.func_107_c((float)chunkcoordinates.field_22216_a + 0.5F, chunkcoordinates.field_529_a, (float)chunkcoordinates.field_528_b + 0.5F, 0.0F, 0.0F);
+                                    world.func_526_a(entityliving);
+                                    func_21166_a(entityliving, world, (float)chunkcoordinates.field_22216_a + 0.5F, chunkcoordinates.field_529_a, (float)chunkcoordinates.field_528_b + 0.5F);
+                                    entityplayer.func_22062_a(true, false, false);
+                                    entityliving.func_22056_G();
+                                    flag = true;
+                                    flag1 = true;
+                                }
+                            }
+                        }
+                    }
+                    i++;
+                }
+            }
+        } while(true);
+        return flag;
+    }
+
+    private static Set field_4311_a = new HashSet();
+    protected static final Class field_22213_a[];
+
+    static 
+    {
+        field_22213_a = (new Class[] {
+            net.minecraft.src.EntitySpider.class, net.minecraft.src.EntityZombie.class, net.minecraft.src.EntitySkeleton.class
+        });
+    }
+}
