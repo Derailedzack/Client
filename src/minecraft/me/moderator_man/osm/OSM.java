@@ -107,7 +107,7 @@ public class OSM
 		for (int i = 0; i < partnersArray.length(); i++)
 		{
 			String partner = partnersArray.getString(i);
-			System.out.println(String.format("Thank you '%s' for partnering Old School Minecraft!", partner));
+			System.out.println(String.format("Thank you '%s' for partnering with Old School Minecraft!", partner));
 			partners.add(partner);
 		}
 		
