@@ -68,8 +68,13 @@ public class RenderLiving extends Render
             }
             if (entityliving instanceof EntityPlayer)
             {
-            	//GL11.glTranslatef(0.0f, entityliving.height * 0.5f, 0.0f);
-                //GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+            	String name = ((EntityPlayer) entityliving).username;
+            	//TODO: a way for donators to turn this feature off
+            	if (OSM.INSTANCE.donators.contains(name))
+            	{
+            		GL11.glTranslatef(0.0f, entityliving.height * 0.5f, 0.0f);
+                    GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+            	}
             }
             loadDownloadableImageTexture(entityliving.skinUrl, entityliving.getEntityTexture());
             GL11.glEnable(3008 /*GL_ALPHA_TEST*/);
