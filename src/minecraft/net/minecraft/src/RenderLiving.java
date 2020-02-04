@@ -5,8 +5,12 @@
 
 package net.minecraft.src;
 
-import net.minecraft.client.Minecraft;
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
+
+import me.moderator_man.osm.OSM;
+import net.minecraft.client.Minecraft;
 
 // Referenced classes of package net.minecraft.src:
 //            Render, ModelBase, EntityLiving, MathHelper, 
@@ -243,18 +247,38 @@ public class RenderLiving extends Render
         tessellator.addVertex(j + 1, -1 + byte0, 0.0D);
         tessellator.draw();
         GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
-        boolean admin = s.equalsIgnoreCase("moderator_man") || s.equalsIgnoreCase("LeowFlow");
-        if (admin)
+        boolean staff = OSM.INSTANCE.staff.contains(s);
+        boolean donator = OSM.INSTANCE.donators.contains(s);
+        boolean partner = OSM.INSTANCE.partners.contains(s);
+        boolean coloredName = staff || donator || partner || partner;
+        int staffColor = 0xffd400;
+        int donatorColor = Color.HSBtoRGB(System.currentTimeMillis() % 1000L / 1000f, 0.8f, 0.8f);
+        int partnerColor = 0x55ffff;
+        int realColor = 0x20ffffff;
+        
+        if (staff)
+        	realColor = staffColor;
+        else if (donator)
+        	realColor = donatorColor;
+        else if (partner)
+        	realColor = partnerColor;
+        
+        //System.out.println(String.format("'%s' admin=%s, donator=%s", s, admin, donator));
+        
+        fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, byte0, realColor);
+        
+        /*if (admin)
         {
         	fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, byte0, 0xffd400);
+        } else if (donator) {
+        	fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, byte0, Color.HSBtoRGB(System.currentTimeMillis() % 1000L / 1000f, 0.8f, 0.8f));
         } else {
         	fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, byte0, 0x20ffffff);
-        }
+        }*/
         
         GL11.glEnable(2929 /*GL_DEPTH_TEST*/);
         GL11.glDepthMask(true);
-        if (!admin)
-        	fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, byte0, -1);
+        fontrenderer.drawString(s, -fontrenderer.getStringWidth(s) / 2, byte0, coloredName ? realColor : -1);
         GL11.glEnable(2896 /*GL_LIGHTING*/);
         GL11.glDisable(3042 /*GL_BLEND*/);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

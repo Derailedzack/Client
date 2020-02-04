@@ -631,7 +631,7 @@ public class NetClientHandler extends NetHandler
     {
     	try
         {
-    		boolean bypass = false; //TODO: remove before publishing
+    		boolean bypass = true; //TODO: remove before publishing
     		if (bypass)
     		{
     			addToSendQueue(new Packet1Login(mc.session.username, 14));

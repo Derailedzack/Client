@@ -8,10 +8,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xbill.DNS.Lookup;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.SRVRecord;
@@ -34,6 +37,11 @@ public class OSM
 	public Memory MEMORY;
 	public ResourceConverter RESOURCE_CONVERTER;
 	public boolean OMEGABUKKIT_SERVER;
+	
+	public ArrayList<String> admins;
+	public ArrayList<String> staff;
+	public ArrayList<String> donators;
+	public ArrayList<String> partners;
 	
 	public void onEnable()
 	{
@@ -59,9 +67,49 @@ public class OSM
 		MEMORY = new Memory();
 		RESOURCE_CONVERTER = new ResourceConverter();
 		OMEGABUKKIT_SERVER = false;
+		admins = new ArrayList<String>();
+		staff = new ArrayList<String>();
+		donators = new ArrayList<String>();
+		partners = new ArrayList<String>();
 		
 		COMMAND_MANAGER.onEnable();
 		RESOURCE_CONVERTER.onEnable();
+		
+		JSONObject adminsObj = new JSONObject(get("https://www.oldschoolminecraft.com/admins.php"));
+		JSONArray adminsArray = adminsObj.getJSONArray("admins");
+		for (int i = 0; i < adminsArray.length(); i++)
+		{
+			String admin = adminsArray.getString(i);
+			System.out.println(String.format("Username '%s' is recognized as ADMIN", admin));
+			admins.add(admin);
+		}
+		
+		JSONObject staffObj = new JSONObject(get("https://www.oldschoolminecraft.com/staff.php"));
+		JSONArray staffArray = staffObj.getJSONArray("staff");
+		for (int i = 0; i < staffArray.length(); i++)
+		{
+			String staff = staffArray.getString(i);
+			System.out.println(String.format("Username '%s' is recognized as GAME_STAFF", staff));
+			this.staff.add(staff);
+		}
+		
+		JSONObject donatorsObj = new JSONObject(get("https://www.oldschoolminecraft.com/donators.php"));
+		JSONArray donatorsArray = donatorsObj.getJSONArray("donators");
+		for (int i = 0; i < donatorsArray.length(); i++)
+		{
+			String donator = donatorsArray.getString(i);
+			System.out.println(String.format("Thank you '%s' for supporting Old School Minecraft!", donator));
+			donators.add(donator);
+		}
+		
+		JSONObject partnersObj = new JSONObject(get("https://www.oldschoolminecraft.com/partners.php"));
+		JSONArray partnersArray = partnersObj.getJSONArray("partners");
+		for (int i = 0; i < partnersArray.length(); i++)
+		{
+			String partner = partnersArray.getString(i);
+			System.out.println(String.format("Thank you '%s' for partnering with Old School Minecraft!", partner));
+			partners.add(partner);
+		}
 		
 		//Minecraft.getMinecraft().gameSettings.debugCamEnable = true;
 		//Minecraft.getMinecraft().gameSettings.noclip = true;

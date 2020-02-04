@@ -1,1 +1,7 @@
 /.metadata/
+bin/
+src/minecraft_server/
+reobf/
+temp/
+CLIENT_PROJECT_BACKUP/
+logs/
