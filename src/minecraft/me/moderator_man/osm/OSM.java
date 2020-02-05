@@ -37,6 +37,7 @@ public class OSM
 	public Memory MEMORY;
 	public ResourceConverter RESOURCE_CONVERTER;
 	public boolean OMEGABUKKIT_SERVER;
+	public boolean BITDEPTHFIX;
 	
 	public ArrayList<String> admins;
 	public ArrayList<String> staff;
@@ -62,11 +63,16 @@ public class OSM
 			ex.printStackTrace();
 		}
 		
+		String bitdepthfixValue = properties.getProperty("bitdepthfix", "true");
+		System.out.println("bitdepthfixValue = " + bitdepthfixValue);
+		
 		COMMAND_MANAGER = new CommandManager();
 		EVENT_MANAGER = new EventManager();
 		MEMORY = new Memory();
 		RESOURCE_CONVERTER = new ResourceConverter();
 		OMEGABUKKIT_SERVER = false;
+		BITDEPTHFIX = Boolean.parseBoolean(bitdepthfixValue);
+		
 		admins = new ArrayList<String>();
 		staff = new ArrayList<String>();
 		donators = new ArrayList<String>();

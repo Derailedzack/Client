@@ -187,6 +187,9 @@ public abstract class Minecraft
     public void startGame()
         throws LWJGLException
     {
+    	//TODO: moderator_man
+        OSM.INSTANCE.onEnable();
+    	
         if(mcCanvas != null)
         {
             Graphics g = mcCanvas.getGraphics();
@@ -219,9 +222,17 @@ public abstract class Minecraft
         try
         {
         	//TODO: OSM (bit depth fix)
-        	PixelFormat pixelFormat = new PixelFormat();
-        	pixelFormat = pixelFormat.withDepthBits(24);
-            Display.create(pixelFormat); //
+        	
+        	if (OSM.INSTANCE.BITDEPTHFIX)
+        	{
+        		System.out.println("BitDepth fix is enabled!");
+        		PixelFormat pixelFormat = new PixelFormat();
+        		pixelFormat = pixelFormat.withDepthBits(24);
+        		Display.create(pixelFormat);
+        	} else {
+        		System.out.println("BitDepth fix is disabled!");
+        		Display.create();
+        	}
         }
         catch(LWJGLException lwjglexception)
         {
@@ -293,9 +304,6 @@ public abstract class Minecraft
         catch(Exception exception1) { }
         checkGLError("Post startup");
         ingameGUI = new GuiIngame(this);
-        
-        //TODO: moderator_man
-        OSM.INSTANCE.onEnable();
         
         if(serverName != null)
         {
