@@ -207,7 +207,7 @@ public class GuiIngame extends Gui
         }
         else {
         	if (!OSM.INSTANCE.donators.contains(Minecraft.getMinecraft().session.username)) {
-        		fontrenderer.drawStringWithShadow((new StringBuilder()).append(text4).toString(), 2, 2, 0xA9A9A9); //leo did this
+        		fontrenderer.drawStringWithShadow((new StringBuilder()).append(text4).toString(), 2, 2, 0xFFFFFF); //leo did this
         	}
         }
         if(recordPlayingUpFor > 0)
