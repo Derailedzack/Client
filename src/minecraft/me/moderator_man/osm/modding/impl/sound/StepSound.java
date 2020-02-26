@@ -1,4 +1,4 @@
-package me.moderator_man.osm.modding.sound;
+package me.moderator_man.osm.modding.impl.sound;
 
 public enum StepSound
 {

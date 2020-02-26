@@ -5,12 +5,6 @@
 
 package net.minecraft.src;
 
-import me.moderator_man.osm.packets.CPacket90Ping;
-import me.moderator_man.osm.packets.CPacket91ChangeSkin;
-import me.moderator_man.osm.packets.CPacket92ChangeCloak;
-import me.moderator_man.osm.packets.CPacket93RequestCosmetics;
-import me.moderator_man.osm.packets.CPacket94RegisterBlock;
-import me.moderator_man.osm.packets.CPacket95Authenticate;
 import me.moderator_man.osm.packets.CPacket96ToggleCapability;
 
 // Referenced classes of package net.minecraft.src:
@@ -38,36 +32,6 @@ public abstract class NetHandler
     /**
      * BEGIN CUSTOM PAYLOADS
      */
-    public void handlePing(CPacket90Ping packet)
-    {
-    	registerPacket(packet);
-    }
-    
-    public void handleChangeSkin(CPacket91ChangeSkin packet)
-    {
-    	registerPacket(packet);
-    }
-    
-    public void handleChangeCloak(CPacket92ChangeCloak packet)
-    {
-    	registerPacket(packet);
-    }
-    
-    public void handleRequestCosmetics(CPacket93RequestCosmetics packet)
-    {
-    	registerPacket(packet);
-    }
-    
-    public void handleRegisterBlock(CPacket94RegisterBlock packet)
-    {
-    	registerPacket(packet);
-    }
-    
-    public void handleAuthenticate(CPacket95Authenticate packet)
-    {
-    	registerPacket(packet);
-    }
-    
     public void handleToggleCapability(CPacket96ToggleCapability packet)
     {
     	registerPacket(packet);

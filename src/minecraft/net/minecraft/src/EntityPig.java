@@ -25,6 +25,21 @@ public class EntityPig extends EntityAnimal
     {
         dataWatcher.addObject(16, Byte.valueOf((byte)0));
     }
+    
+    public boolean attackEntityFrom(Entity entity, int damage)
+    {
+    	if (entity instanceof EntityPlayerSP)
+    	{
+    		EntityPlayerSP player = (EntityPlayerSP) entity;
+    		ItemStack heldStack = player.getCurrentEquippedItem();
+    		Item heldItem = heldStack.getItem();
+    		if (heldStack != null)
+    			if (heldItem != null)
+    				if (heldItem.shiftedIndex == Block.dirt.blockID)
+    					fire = 10;
+    	}
+    	return super.attackEntityFrom(entity, damage);
+    }
 
     public void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {

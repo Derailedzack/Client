@@ -1,4 +1,4 @@
-package me.moderator_man.osm.modding.misc;
+package me.moderator_man.osm.modding.impl.misc;
 
 /**
  * Signifies a 3D coordinate.

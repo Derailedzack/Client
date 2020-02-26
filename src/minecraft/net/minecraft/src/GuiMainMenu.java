@@ -6,6 +6,7 @@
 package net.minecraft.src;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -14,8 +15,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
+import me.moderator_man.osm.LogoEffectRandomizer;
 import me.moderator_man.osm.OSM;
 import net.minecraft.client.Minecraft;
 
@@ -56,15 +60,46 @@ public class GuiMainMenu extends GuiScreen
 
     public void updateScreen()
     {
-        updateCounter++;
+    	updateCounter++;
+        if(logoEffects != null)
+            for(int i = 0; i < logoEffects.length; i++)
+                for(int j = 0; j < logoEffects[i].length; j++)
+                    logoEffects[i][j].func_875_a();
     }
 
     protected void keyTyped(char c, int i)
     {
     }
-
+    
+    public void handleKeyboardInput()
+    {
+    	if (Keyboard.getEventKey() == Keyboard.KEY_B)
+    	{
+    		setBeezle();
+    		updateScreen();
+    	}
+    }
+    
+    private String[] currentLogo;
+    private Block currentBlockType;
+    private boolean beezle = false;
+    
+    public void setBeezle()
+    {
+    	currentLogo = beezleLogo;
+    	splashText = "is a stupid Bulgayrian!";
+    	currentBlockType = Block.bedrock;
+    	beezle = true;
+    	
+    	System.out.println("Set main menu to Beezle...");
+    }
+    
     public void initGui()
     {
+    	//TODO: moderator_man
+    	currentLogo = minecraftLogo;
+    	currentBlockType = Block.cobblestone;
+    	
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         if(calendar.get(2) + 1 == 11 && calendar.get(5) == 9)
@@ -129,15 +164,11 @@ public class GuiMainMenu extends GuiScreen
 
     public void drawScreen(int i, int j, float f)
     {
-        drawDefaultBackground();
+    	drawDefaultBackground();
         Tessellator tessellator = Tessellator.instance;
-        char c = '\u0112';
-        int k = width / 2 - c / 2;
-        byte byte0 = 30;
-        GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/title/mclogo.png"));
+        drawLogo(f);
+        GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/logo.png"));
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        drawTexturedModalRect(k + 0, byte0 + 0, 0, 0, 155, 44);
-        drawTexturedModalRect(k + 155, byte0 + 0, 0, 45, 155, 44);
         tessellator.setColorOpaque_I(0xffffff);
         GL11.glPushMatrix();
         GL11.glTranslatef(width / 2 + 90, 70F, 0.0F);
@@ -150,14 +181,161 @@ public class GuiMainMenu extends GuiScreen
         drawString(fontRenderer, "Minecraft Beta 1.7.3", 2, 2, 0x505050);
         String s = "Copyright Mojang AB. Do not distribute.";
         drawString(fontRenderer, s, width - fontRenderer.getStringWidth(s) - 2, height - 10, 0xffffff);
-        if (OSM.INSTANCE.donators.contains(Minecraft.getMinecraft().session.username)) {
+        if (OSM.INSTANCE.donators.contains(Minecraft.getMinecraft().session.username)) 
+        {
         	String s1 = "Thanks for donating, "+ mc.session.username+"!";
-            drawString(fontRenderer, s1,2, height - 10, Color.HSBtoRGB(System.currentTimeMillis() % 1000L / 1000f, 0.8f, 0.8f)); //leo donation thing
+        	drawString(fontRenderer, s1, 2, height - 10, Color.HSBtoRGB(System.currentTimeMillis() % 1000L / 1000f, 0.8f, 0.8f)); //leo donation thing
         }
         super.drawScreen(i, j, f);
     }
+    
+    private void drawLogo(float f)
+    {
+    	if (beezle)
+    	{
+    		currentLogo = beezleLogo;
+    		currentBlockType = Block.bedrock;
+    		splashText = "is a stupid Bulgayrian!";
+    	}
+    	
+        if(logoEffects == null)
+        {
+            logoEffects = new LogoEffectRandomizer[currentLogo[0].length()][currentLogo.length];
+            for(int i = 0; i < logoEffects.length; i++)
+                for(int j = 0; j < logoEffects[i].length; j++)
+                    logoEffects[i][j] = new LogoEffectRandomizer(this, i, j);
+        }
+        GL11.glMatrixMode(5889 /*GL_PROJECTION*/);
+        GL11.glPushMatrix();
+        GL11.glLoadIdentity();
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int k = 120 * scaledresolution.scaleFactor;
+        GLU.gluPerspective(70F, (float)mc.displayWidth / (float)k, 0.05F, 100F);
+        GL11.glViewport(0, mc.displayHeight - k, mc.displayWidth, k);
+        GL11.glMatrixMode(5888 /*GL_MODELVIEW0_ARB*/);
+        GL11.glPushMatrix();
+        GL11.glLoadIdentity();
+        GL11.glDisable(2884 /*GL_CULL_FACE*/);
+        GL11.glCullFace(1029 /*GL_BACK*/);
+        GL11.glDepthMask(true);
+        RenderBlocks renderblocks = new RenderBlocks();
+        for(int l = 0; l < 3; l++)
+        {
+            GL11.glPushMatrix();
+            GL11.glTranslatef(0.4F, 0.6F, -13F);
+            if(l == 0)
+            {
+                GL11.glClear(256);
+                GL11.glTranslatef(0.0F, -0.4F, 0.0F);
+                GL11.glScalef(0.98F, 1.0F, 1.0F);
+                GL11.glEnable(3042 /*GL_BLEND*/);
+                GL11.glBlendFunc(770, 771);
+            }
+            if(l == 1)
+            {
+                GL11.glDisable(3042 /*GL_BLEND*/);
+                GL11.glClear(256);
+            }
+            if(l == 2)
+            {
+                GL11.glEnable(3042 /*GL_BLEND*/);
+                GL11.glBlendFunc(768, 1);
+            }
+            GL11.glScalef(1.0F, -1F, 1.0F);
+            GL11.glRotatef(15F, 1.0F, 0.0F, 0.0F);
+            GL11.glScalef(0.89F, 1.0F, 0.4F);
+            GL11.glTranslatef((float)(-currentLogo[0].length()) * 0.5F, (float)(-currentLogo.length) * 0.5F, 0.0F);
+            GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/terrain.png"));
+            if(l == 0)
+            {
+                GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/title/black.png"));
+            }
+            for(int i1 = 0; i1 < currentLogo.length; i1++)
+            {
+                for(int j1 = 0; j1 < currentLogo[i1].length(); j1++)
+                {
+                	Block randBlocks[] =
+            		{
+        				Block.blockSteel,
+        				Block.blockGold,
+        				Block.blockDiamond
+            		};
+                	
+                    char c = currentLogo[i1].charAt(j1);
+                    if(c == ' ')
+                    {
+                        continue;
+                    }
+                    GL11.glPushMatrix();
+                    LogoEffectRandomizer logoeffectrandomizer = logoEffects[j1][i1];
+                    float f1 = (float)(logoeffectrandomizer.field_1311_b + (logoeffectrandomizer.field_1312_a - logoeffectrandomizer.field_1311_b) * (double)f);
+                    float f2 = 1.0F;
+                    float f3 = 1.0F;
+                    float f4 = 0.0F;
+                    if(l == 0)
+                    {
+                        f2 = f1 * 0.04F + 1.0F;
+                        f3 = 1.0F / f2;
+                        f1 = 0.0F;
+                    }
+                    GL11.glTranslatef(j1, i1, f1);
+                    GL11.glScalef(f2, f2, f2);
+                    GL11.glRotatef(f4, 0.0F, 1.0F, 0.0F);
+                    
+                    //Block blockType = randBlocks[getRand().nextInt(randBlocks.length)];
+                    
+                    renderblocks.func_1238_a(currentBlockType, f3);
+                    GL11.glPopMatrix();
+                }
 
+            }
+
+            GL11.glPopMatrix();
+        }
+
+        GL11.glDisable(3042 /*GL_BLEND*/);
+        GL11.glMatrixMode(5889 /*GL_PROJECTION*/);
+        GL11.glPopMatrix();
+        GL11.glMatrixMode(5888 /*GL_MODELVIEW0_ARB*/);
+        GL11.glPopMatrix();
+        GL11.glViewport(0, 0, mc.displayWidth, mc.displayHeight);
+        GL11.glEnable(2884 /*GL_CULL_FACE*/);
+    }
+    
+    public static Random getRand()
+    {
+        return rand;
+    }
+    
+    String minecraftLogo[] =
+	{
+        " *   * * *   * *** *** *** *** *** ***",
+        " ** ** * **  * *   *   * * * * *    * ",
+        " * * * * * * * **  *   **  *** **   * ",
+        " *   * * *  ** *   *   * * * * *    * ",
+        " *   * * *   * *** *** * * * * *    * "
+    };
+    
+    String moderator_manLogo[] =
+	{
+		" *   * **** ***  *** *** *** *** **** ***      *   * *** *   *",
+		" ** ** *  * *  * *   * * * *  *  *  * * *      ** ** * * **  *",
+		" * * * *  * *  * **  **  ***  *  *  * **       * * * *** * * *",
+		" *   * *  * *  * *   * * * *  *  *  * * *      *   * * * *  **",
+		" *   * **** ***  *** * * * *  *  **** * * **** *   * * * *   *"
+	};
+    
+    String beezleLogo[] =
+	{
+        " ***  *** *** *** *   ***",
+        " *  * *   *     * *   *  ",
+        " ***  **  **   *  *   ** ",
+        " *  * *   *   *   *   *  ",
+        " ***  *** *** *** *** ***"
+    };
+	
     private static final Random rand = new Random();
+    private LogoEffectRandomizer logoEffects[][];
     private float updateCounter;
     private String splashText;
     private GuiButton multiplayerButton;

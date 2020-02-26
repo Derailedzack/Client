@@ -14,10 +14,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-import me.moderator_man.osm.OSM;
-import me.moderator_man.osm.packets.CPacket93RequestCosmetics;
-import net.minecraft.client.Minecraft;
-
 // Referenced classes of package net.minecraft.src:
 //            IBlockAccess, WorldProvider, WorldInfo, MapStorage, 
 //            ISaveHandler, ChunkProvider, EntityPlayer, ChunkProviderLoadOrGenerate, 

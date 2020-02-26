@@ -246,9 +246,9 @@ public class Block
     {
     }
 
-    public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int l)
-    {
-    }
+public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int l)
+{
+}
 
     public void onNeighborBlockChange(World world, int i, int j, int k, int l)
     {

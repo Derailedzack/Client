@@ -14,13 +14,6 @@ import java.util.Random;
 import org.json.JSONObject;
 
 import me.moderator_man.osm.OSM;
-import me.moderator_man.osm.api.Endpoints;
-import me.moderator_man.osm.packets.CPacket90Ping;
-import me.moderator_man.osm.packets.CPacket91ChangeSkin;
-import me.moderator_man.osm.packets.CPacket92ChangeCloak;
-import me.moderator_man.osm.packets.CPacket93RequestCosmetics;
-import me.moderator_man.osm.packets.CPacket94RegisterBlock;
-import me.moderator_man.osm.packets.CPacket95Authenticate;
 import me.moderator_man.osm.packets.CPacket96ToggleCapability;
 import net.minecraft.client.Minecraft;
 
@@ -81,132 +74,6 @@ public class NetClientHandler extends NetHandler
     /**
      * BEGIN CUSTOM PAYLOADS
      */
-    public void handlePing(CPacket90Ping packet)
-    {
-    	mc.thePlayer.addChatMessage(packet.msg);
-    }
-    
-    public void handleChangeSkin(CPacket91ChangeSkin packet)
-    {
-    	if (mc.isMultiplayerWorld())
-    	{
-    		if (packet.username.equalsIgnoreCase(mc.thePlayer.username))
-    		{
-    			mc.thePlayer.skinUrl = packet.url;
-    			//OSM.INSTANCE.addMsg(String.format("Your skin was changed to '%s'", packet.url));
-    			mc.renderGlobal.obtainEntitySkin(mc.thePlayer);
-    			return;
-    		}
-    		
-    		EntityPlayer player = mc.theWorld.getPlayerEntityByName(packet.username);
-    		if (player != null)
-    		{
-    			player.skinUrl = packet.url;
-    			mc.renderGlobal.obtainEntitySkin(player);
-    		} else {
-    			OSM.INSTANCE.addMsg(String.format("Couldn't set skin of '%s'", packet.username));
-    		}
-    	}
-    }
-    
-    public void handleChangeCloak(CPacket92ChangeCloak packet)
-    {
-    	if (packet.username.equalsIgnoreCase(mc.thePlayer.username))
-    	{
-    		mc.thePlayer.cloakUrl = packet.url;
-    		mc.renderGlobal.obtainEntitySkin(mc.thePlayer);
-    		mc.thePlayer.updateCloak();
-    		return;
-    	}
-    	
-    	EntityPlayer player = mc.theWorld.getPlayerEntityByName(packet.username);
-    	if (player != null)
-    	{
-    		player.cloakUrl = packet.url;
-    		mc.renderGlobal.obtainEntitySkin(player);
-    		player.updateCloak();
-    	} else {
-    		OSM.INSTANCE.addMsg(String.format("Couldn't set cloak of '%s'", packet.username));
-    	}
-    }
-    
-    public void handleRequestCosmetics(CPacket93RequestCosmetics packet)
-    {
-    	// the client doesnt handle this packet
-    }
-    
-    public void handleRegisterBlock(CPacket94RegisterBlock packet)
-    {
-    	MapColor mapColor = null;
-    	if (MapColor.mapColorArray[packet.colorIndex] != null)
-    		mapColor = MapColor.mapColorArray[packet.colorIndex];
-    	else
-    		mapColor = new MapColor(packet.colorIndex, packet.colorValue);
-    	Material material = new Material(mapColor)
-    			.setCanBurn(packet.canBurn)
-    			.setGroundCover(packet.groundCover)
-    			.setIsOpaque(packet.isOpaque)
-    			.setCanHarvest(packet.canHarvest)
-    			.setMobilityFlag(packet.mobilityFlag);
-    	StepSound stepSound = new StepSound(packet.label, packet.volume, packet.pitch);
-    	Block block = new Block(packet.blockID, packet.blockIndexInTexture, material)
-    			.setHardness(packet.blockHardness)
-    			.setResistance(packet.blockResistance)
-    			.setEnableStats(packet.enableStats)
-    			.setMinBounds(packet.minX, packet.minY, packet.minZ)
-    			.setMaxBounds(packet.maxX, packet.maxY, packet.maxZ)
-    			.setStepSound(stepSound)
-    			.setParticleGravity(packet.blockParticleGravity)
-    			.setSlipperiness(packet.slipperiness)
-    			.setBlockName(packet.blockName);
-    	
-    	if (Block.blocksList[packet.blockID] != null)
-    	{
-    		System.out.println("Successfully registered block: " + packet.blockID);
-    	}
-    }
-    
-    public void handleAuthenticate(CPacket95Authenticate packet)
-    {
-    	try
-        {
-    		JSONObject request = new JSONObject();
-    		request.append("username", mc.session.username);
-    		request.append("sessionId", mc.session.sessionId);
-    		request.append("serverId", packet.serverId);
-    		JSONObject obj = new JSONObject(OSM.INSTANCE.post(Endpoints.SESSION_BASE + Endpoints.SESSION_JOIN, request.toString()));
-    		
-            /*URL url = new URL((new StringBuilder()).append("http://api.codebase.pw:8080/joinserver?username=").append(mc.session.username).append("&sessionId=").append(mc.session.sessionId).append("&serverId=").append(packet.serverId).toString());
-            BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(url.openStream()));
-            String s = bufferedreader.readLine();
-            bufferedreader.close();
-            JSONObject obj = new JSONObject(s);*/
-            boolean error = obj.has("error");
-            if (error)
-            {
-            	netManager.networkShutdown("disconnect.loginFailedInfo", new Object[] { obj.getString("error") });
-            	return;
-            } else {
-            	if (obj.has("response"))
-            	{
-            		if (obj.getString("response").equalsIgnoreCase("ok"))
-            		{
-            			addToSendQueue(packet);
-            		} else {
-            			netManager.networkShutdown("disconnect.loginFailedInfo", new Object[] { obj.getString("response") });
-            		}
-            	}
-            }
-        }
-        catch(Exception exception)
-        {
-            exception.printStackTrace();
-            netManager.networkShutdown("disconnect.genericReason", new Object[] {
-                (new StringBuilder()).append("Internal client error: ").append(exception.toString()).toString()
-            });
-        }
-    }
-    
     public void handleToggleCapability(CPacket96ToggleCapability packet)
     {
     	System.out.println(String.format("Set flag: %s = %s", packet.label, packet.flag));
@@ -226,6 +93,9 @@ public class NetClientHandler extends NetHandler
         mc.thePlayer.dimension = packet1login.dimension;
         mc.displayGuiScreen(new GuiDownloadTerrain(this));
         mc.thePlayer.entityId = packet1login.protocolVersion;
+        
+        //TODO: moderator_man (remove)
+        //addToSendQueue(new Packet99Test("Hello, server!"));
     }
 
     public void handlePickupSpawn(Packet21PickupSpawn packet21pickupspawn)
@@ -631,7 +501,7 @@ public class NetClientHandler extends NetHandler
     {
     	try
         {
-    		boolean bypass = true; //TODO: remove before publishing
+    		boolean bypass = false; //TODO: remove before publishing
     		if (bypass)
     		{
     			addToSendQueue(new Packet1Login(mc.session.username, 14));

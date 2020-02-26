@@ -54,6 +54,11 @@ public class ModelBiped extends ModelBase
         bipedLeftLeg.mirror = true;
         bipedLeftLeg.addBox(-2F, 0.0F, -2F, 4, 12, 4, f);
         bipedLeftLeg.setRotationPoint(2.0F, 12F + f1, 0.0F);
+        
+        //TODO: moderator_man
+        bipedTopHat = new ModelRenderer(24, 0);
+        bipedTopHat.addBox(-3F, -3F, -3F, 3, 3, 3, f);
+        bipedTopHat.addBox(-1f, -1f, -1f, 1, 1, 1, f);
     }
 
     public void render(float f, float f1, float f2, float f3, float f4, float f5)
@@ -156,6 +161,17 @@ public class ModelBiped extends ModelBase
         bipedEars.rotationPointX = 0.0F;
         bipedEars.rotationPointY = 0.0F;
         bipedEars.render(f);
+    }
+    
+    //TODO: moderator_man
+    public ModelRenderer bipedTopHat;
+    public void renderTopHat(float f)
+    {
+    	bipedTopHat.rotateAngleX = bipedHead.rotateAngleX;
+    	bipedTopHat.rotateAngleY = bipedHead.rotateAngleY;
+    	bipedTopHat.rotationPointX = 0.0f;
+    	bipedTopHat.rotationPointY = 0.0f;
+    	bipedTopHat.render(f);
     }
 
     public void renderCloak(float f)

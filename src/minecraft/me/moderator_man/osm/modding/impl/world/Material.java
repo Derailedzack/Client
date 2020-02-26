@@ -1,4 +1,4 @@
-package me.moderator_man.osm.modding.world;
+package me.moderator_man.osm.modding.impl.world;
 
 import net.minecraft.src.MapColor;
 

@@ -48,6 +48,7 @@ public class EntityPainting extends Entity
         {
             art = (EnumArt)arraylist.get(rand.nextInt(arraylist.size()));
         }
+        art = EnumArt.Pigscene;
         setDirection(l);
     }
 

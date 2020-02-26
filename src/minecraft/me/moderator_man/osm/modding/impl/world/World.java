@@ -1,6 +1,6 @@
-package me.moderator_man.osm.modding.world;
+package me.moderator_man.osm.modding.impl.world;
 
-import me.moderator_man.osm.modding.misc.Vector;
+import me.moderator_man.osm.modding.impl.misc.Vector;
 import net.minecraft.client.Minecraft;
 
 /**

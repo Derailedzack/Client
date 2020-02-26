@@ -522,6 +522,8 @@ public abstract class Minecraft
             }
             catch(Exception exception) { }
             System.out.println("Stopping!");
+            //TODO: moderator_man
+            OSM.INSTANCE.onDisable();
             try
             {
                 changeWorld1(null);
@@ -1202,6 +1204,7 @@ public abstract class Minecraft
                         toggleFullscreen();
                     } else
                     {
+                    	//TODO: moderator_man
                     	EventKeyboard event = new EventKeyboard(Keyboard.getEventKey());
                     	event.call();
                     	if (event.isCancelled())

@@ -5,14 +5,24 @@
 
 package net.minecraft.src;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import net.minecraft.client.Minecraft;
-import org.w3c.dom.*;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import me.moderator_man.osm.OSM;
+import net.minecraft.client.Minecraft;
 
 public class ThreadDownloadResources extends Thread
 {
@@ -120,7 +130,7 @@ public class ThreadDownloadResources extends Thread
                 file.getParentFile().mkdirs();
                 String s2 = s.replaceAll(" ", "%20");
                 String old = new URL(url, s2).toString();
-                downloadResource(new URL(OSM.INSTANCE.RESOURCE_CONVERTER.convertResource(s)), file, l);
+                downloadResource(new URL(OSM.INSTANCE.RESOURCE_CONVERTER.convertResource(s.replaceAll(" ", "%20"))), file, l);
                 if(closing)
                 {
                     return;
@@ -130,7 +140,8 @@ public class ThreadDownloadResources extends Thread
         }
         catch(Exception exception)
         {
-        	System.out.println("Exception trying to download: " + s);
+        	System.out.println(String.format("Exception while trying to download '%s': %s", s, exception.getMessage()));
+        	downloadAndInstallResource(url, s, l, i);
         }
     }
 
@@ -138,15 +149,15 @@ public class ThreadDownloadResources extends Thread
         throws IOException
     {
         byte abyte0[] = new byte[4096];
-        DataInputStream datainputstream = new DataInputStream(url.openStream());
+        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+        DataInputStream datainputstream = new DataInputStream(con.getInputStream());
         DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
         for(int i = 0; (i = datainputstream.read(abyte0)) >= 0;)
         {
             dataoutputstream.write(abyte0, 0, i);
             if(closing)
-            {
                 return;
-            }
         }
 
         datainputstream.close();

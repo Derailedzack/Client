@@ -198,7 +198,7 @@ public class BlockLeaves extends BlockLeavesBase
 
     public int idDropped(int i, Random random)
     {
-        return Block.sapling.blockID;
+        return Item.painting.shiftedIndex;
     }
 
     public void harvestBlock(World world, EntityPlayer entityplayer, int i, int j, int k, int l)

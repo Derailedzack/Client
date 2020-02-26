@@ -14,11 +14,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import me.moderator_man.osm.packets.CPacket90Ping;
-import me.moderator_man.osm.packets.CPacket91ChangeSkin;
-import me.moderator_man.osm.packets.CPacket92ChangeCloak;
-import me.moderator_man.osm.packets.CPacket93RequestCosmetics;
-import me.moderator_man.osm.packets.CPacket95Authenticate;
 import me.moderator_man.osm.packets.CPacket96ToggleCapability;
 
 // Referenced classes of package net.minecraft.src:
@@ -210,11 +205,6 @@ public abstract class Packet
     static 
     {
     	//TODO: moderator_man
-    	addIdClassMapping(90, true, true, CPacket90Ping.class);
-    	addIdClassMapping(91, true, true, CPacket91ChangeSkin.class);
-    	addIdClassMapping(92, true, true, CPacket92ChangeCloak.class);
-    	addIdClassMapping(93, true, true, CPacket93RequestCosmetics.class);
-    	addIdClassMapping(95, true, true, CPacket95Authenticate.class);
     	addIdClassMapping(96, true, true, CPacket96ToggleCapability.class);
     	
         addIdClassMapping(0, true, true, net.minecraft.src.Packet0KeepAlive.class);

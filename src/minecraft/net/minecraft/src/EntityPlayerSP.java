@@ -5,7 +5,8 @@
 
 package net.minecraft.src;
 
-import me.moderator_man.osm.OSM;
+import org.lwjgl.input.Keyboard;
+
 import me.moderator_man.osm.event.Type;
 import me.moderator_man.osm.event.events.EventUpdate;
 import me.moderator_man.osm.threads.ThreadConfigurePlayer;

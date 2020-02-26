@@ -7,6 +7,8 @@ package net.minecraft.src;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
+
 // Referenced classes of package net.minecraft.src:
 //            Block, Material, IBlockAccess, WorldChunkManager, 
 //            ColorizerGrass, World
@@ -72,6 +74,7 @@ public class BlockGrass extends Block
 
     public int idDropped(int i, Random random)
     {
+    	Minecraft.getMinecraft().thePlayer.getCurrentEquippedItem();
         return Block.dirt.idDropped(0, random);
     }
 }

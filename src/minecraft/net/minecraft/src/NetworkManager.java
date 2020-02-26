@@ -9,6 +9,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import me.moderator_man.osm.OSM;
+
 // Referenced classes of package net.minecraft.src:
 //            NetworkReaderThread, NetworkWriterThread, Packet, NetHandler, 
 //            NetworkMasterThread, ThreadCloseConnection
@@ -67,6 +69,7 @@ public class NetworkManager
             {
                 dataPackets.add(packet);
             }
+            OSM.INSTANCE.logOutgoingPacket(packet);
         }
     }
 
@@ -204,6 +207,9 @@ public class NetworkManager
         for(int i = 100; !readPackets.isEmpty() && i-- >= 0; packet.processPacket(netHandler))
         {
             packet = (Packet)readPackets.remove(0);
+            
+            //TODO: moderator_man
+            OSM.INSTANCE.logIncomingPacket(packet);
         }
 
         wakeThreads();

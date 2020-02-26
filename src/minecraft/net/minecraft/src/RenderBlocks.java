@@ -3425,6 +3425,35 @@ public class RenderBlocks
             tessellator.addVertexWithUV(d12, d14, d16, d3, d5);
         }
     }
+    
+    //TODO: moderator_man
+    public void func_1238_a(Block block, float f)
+    {
+        int i = block.getRenderType();
+        Tessellator tessellator = Tessellator.instance;
+        if(i == 0)
+        {
+            block.setBlockBoundsForItemRender();
+            GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+            float f1 = 0.5F;
+            float f2 = 1.0F;
+            float f3 = 0.8F;
+            float f4 = 0.6F;
+            tessellator.startDrawingQuads();
+            tessellator.setColorRGBA_F(f2, f2, f2, f);
+            renderBottomFace(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(0));
+            tessellator.setColorRGBA_F(f1, f1, f1, f);
+            renderTopFace(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(1));
+            tessellator.setColorRGBA_F(f3, f3, f3, f);
+            renderEastFace(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(2));
+            renderWestFace(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(3));
+            tessellator.setColorRGBA_F(f4, f4, f4, f);
+            renderNorthFace(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(4));
+            renderSouthFace(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSide(5));
+            tessellator.draw();
+            GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+        }
+    }
 
     public void renderBlockOnInventory(Block block, int i, float f)
     {

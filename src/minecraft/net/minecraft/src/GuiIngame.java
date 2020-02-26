@@ -178,7 +178,7 @@ public class GuiIngame extends Gui
             GL11.glEnable(3008 /*GL_ALPHA_TEST*/);
             GL11.glEnable(2929 /*GL_DEPTH_TEST*/);
         }
-        String text4 = "oldschoolminecraft.com";
+        String watermark = "oldschoolminecraft.com";
         if(mc.gameSettings.showDebugInfo)
         {
             GL11.glPushMatrix();
@@ -186,7 +186,7 @@ public class GuiIngame extends Gui
             {
                 GL11.glTranslatef(0.0F, 32F, 0.0F);
             }
-            fontrenderer.drawStringWithShadow((new StringBuilder()).append(text4+" (").append(mc.debug).append(")").toString(), 2, 2, 0xffffff);
+            fontrenderer.drawStringWithShadow((new StringBuilder()).append(watermark+" (").append(mc.debug).append(")").toString(), 2, 2, 0xffffff);
             fontrenderer.drawStringWithShadow(mc.debugInfoRenders(), 2, 12, 0xffffff);
             fontrenderer.drawStringWithShadow(mc.func_6262_n(), 2, 22, 0xffffff);
             fontrenderer.drawStringWithShadow(mc.debugInfoEntities(), 2, 32, 0xffffff);
@@ -206,8 +206,13 @@ public class GuiIngame extends Gui
             GL11.glPopMatrix();
         }
         else {
-        	if (!OSM.INSTANCE.donators.contains(Minecraft.getMinecraft().session.username)) {
-        		fontrenderer.drawStringWithShadow((new StringBuilder()).append(text4).toString(), 2, 2, 0xA9A9A9); //leo did this
+        	if (!OSM.INSTANCE.donators.contains(Minecraft.getMinecraft().session.username))
+        	{
+        		fontrenderer.drawStringWithShadow((new StringBuilder()).append(watermark).toString(), 2, 2, 0xffffff); //leo did this
+        		
+        		if (OSM.INSTANCE.staff.contains(mc.session.username))
+        			if (OSM.INSTANCE.getPlayer().playerCapabilities.getFlag("flight"))
+        				fontrenderer.drawStringWithShadow((new StringBuilder()).append("Flight enabled").toString(), 2, 12, 0xffffff);
         	}
         }
         if(recordPlayingUpFor > 0)

@@ -15,8 +15,8 @@ public class ResourceConverter
 	
 	public String convertResource(String resource)
 	{
-		String hash = meta.getJSONObject(resource).getString("hash");
-		String sub = hash.substring(0, 2);
-		return String.format("http://resources.download.minecraft.net/%s/%s", sub, hash);
+		//String hash = meta.getJSONObject(resource).getString("hash");
+		//String sub = hash.substring(0, 2);
+		return String.format("https://www.oldschoolminecraft.com/grabsound?k=%s", resource);
 	}
 }

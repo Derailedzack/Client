@@ -9,9 +9,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-import me.moderator_man.osm.OSM;
-import me.moderator_man.osm.packets.CPacket93RequestCosmetics;
-
 // Referenced classes of package net.minecraft.src:
 //            World, SaveHandlerMP, WorldProvider, MCHash, 
 //            ChunkCoordinates, NetClientHandler, IWorldAccess, Entity, 

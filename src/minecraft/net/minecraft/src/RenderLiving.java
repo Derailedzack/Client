@@ -72,8 +72,8 @@ public class RenderLiving extends Render
             	//TODO: a way for donators to turn this feature off
             	if (OSM.INSTANCE.donators.contains(name))
             	{
-            		GL11.glTranslatef(0.0f, entityliving.height * 0.5f, 0.0f);
-                    GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+            		//GL11.glTranslatef(0.0f, entityliving.height * 0.5f, 0.0f);
+                    //GL11.glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
             	}
             }
             loadDownloadableImageTexture(entityliving.skinUrl, entityliving.getEntityTexture());

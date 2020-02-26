@@ -7,14 +7,20 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.lwjgl.input.Keyboard;
 import org.xbill.DNS.Lookup;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.SRVRecord;
@@ -22,6 +28,8 @@ import org.xbill.DNS.Type;
 
 import me.moderator_man.osm.command.CommandManager;
 import me.moderator_man.osm.event.EventManager;
+import me.moderator_man.osm.event.EventTarget;
+import me.moderator_man.osm.event.events.EventKeyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Packet;
@@ -43,6 +51,9 @@ public class OSM
 	public ArrayList<String> staff;
 	public ArrayList<String> donators;
 	public ArrayList<String> partners;
+	
+	public StringBuilder packetLog;
+	public boolean logPackets;
 	
 	public void onEnable()
 	{
@@ -77,6 +88,10 @@ public class OSM
 		staff = new ArrayList<String>();
 		donators = new ArrayList<String>();
 		partners = new ArrayList<String>();
+		
+		packetLog = new StringBuilder();
+		//TODO: moderator_man change to false
+		logPackets = false;
 		
 		COMMAND_MANAGER.onEnable();
 		RESOURCE_CONVERTER.onEnable();
@@ -120,7 +135,58 @@ public class OSM
 		//Minecraft.getMinecraft().gameSettings.debugCamEnable = true;
 		//Minecraft.getMinecraft().gameSettings.noclip = true;
 		
+		EVENT_MANAGER.register(this);
+		
 		System.out.println("Startup complete.");
+	}
+	
+	public void onDisable()
+	{
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+		Date date = new Date();
+		//System.out.println(dateFormat.format(date)); // 2016-11-16 12-08-43
+		
+		dumpPacketLogs("packetdump-" + dateFormat.format(date) + ".log");
+		
+		System.out.println("Shutdown complete.");
+	}
+	
+	@EventTarget
+	public void onKeyboard(EventKeyboard event)
+	{
+		if (event.getKeyCode() == Keyboard.KEY_R)
+		{
+			if (getPlayer() != null)
+			{
+				if (getPlayer().playerCapabilities.getFlag("flight_enabled"))
+				{
+					if (getPlayer().playerCapabilities.getFlag("flight"))
+						getPlayer().playerCapabilities.setFlag("flight", false);
+					else
+						getPlayer().playerCapabilities.setFlag("flight", true);
+				}
+			}
+		}
+	}
+	
+	public void logIncomingPacket(Packet packet)
+	{
+		packetLog.append("INCOMING " + packet.getClass() + "\n");
+	}
+	
+	public void logOutgoingPacket(Packet packet)
+	{
+		packetLog.append("OUTGOING " + packet.getClass() + "\n");
+	}
+	
+	public void dumpPacketLogs(String file)
+	{
+		try
+		{
+			Files.write(Paths.get(file), packetLog.toString().getBytes());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	public void addMsg(String msg)

@@ -15,14 +15,14 @@ public class CPacket96ToggleCapability extends Packet
 	@Override
 	public void readPacketData(DataInputStream datainputstream) throws IOException
 	{
-		label = datainputstream.readUTF();
+		label = readString(datainputstream, 32);
 		flag = datainputstream.readBoolean();
 	}
 
 	@Override
 	public void writePacketData(DataOutputStream dataoutputstream) throws IOException
 	{
-		dataoutputstream.writeUTF(label);
+		writeString(label, dataoutputstream);
 		dataoutputstream.writeBoolean(flag);
 	}
 
@@ -35,6 +35,6 @@ public class CPacket96ToggleCapability extends Packet
 	@Override
 	public int getPacketSize()
 	{
-		return 0;
+		return label.length() + 1;
 	}
 }

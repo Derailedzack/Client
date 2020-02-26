@@ -34,6 +34,10 @@ public class CommandManager
 	
 	public boolean process(String msg)
 	{
+		boolean disableCommands = true;
+		if (disableCommands)
+			return true;
+		
 		if (msg.startsWith("."))
 		{
 			msg = msg.substring(1, msg.length());

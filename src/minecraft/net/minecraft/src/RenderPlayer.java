@@ -160,6 +160,11 @@ public class RenderPlayer extends RenderLiving
             }
 
         }
+        //TODO: moderator_man
+        if (entityplayer.username.equals("Debug"))
+        {
+        	//modelBipedMain.renderEars(0.0625F);
+        }
         if(loadDownloadableImageTexture(entityplayer.playerCloakUrl, null))
         {
             GL11.glPushMatrix();
